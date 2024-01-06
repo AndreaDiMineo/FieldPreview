@@ -11,7 +11,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-public class Home extends Fragment {
+import com.example.fieldpreview.databinding.ActivityHomepageBinding;
+
+public class HomeFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -23,10 +25,5 @@ public class Home extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        Button button = view.findViewById(R.id.button);
-        button.setOnClickListener(v -> {
-            Intent intent = new Intent(RunningFragment.this.getContext(), Details.class);
-            startActivity(intent);
-        });
     }
 }

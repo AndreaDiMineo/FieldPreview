@@ -1,2 +1,8 @@
-package com.example.fieldpreview;public interface OnItemClickListener {
+package com.example.fieldpreview;
+
+import android.view.View;
+
+public interface OnItemClickListener {
+
+    void onItemClick(View view, int position);
 }
