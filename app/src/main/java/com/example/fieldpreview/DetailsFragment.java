@@ -5,6 +5,7 @@ import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.ContentValues;
+import android.graphics.Color;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -172,45 +173,9 @@ public class DetailsFragment extends Fragment {
                     .setReorderingAllowed(true)
                     .commit();
         });
-        calendarImage.setOnClickListener(v -> {
-            if (status == false && count == 0) {
-                final Calendar c = Calendar.getInstance();
-                mYear = c.get(Calendar.YEAR);
-                mMonth = c.get(Calendar.MONTH);
-                mDay = c.get(Calendar.DAY_OF_MONTH);
-                DatePickerDialog datePickerDialog = new DatePickerDialog(DetailsFragment.this.getContext(), new DatePickerDialog.OnDateSetListener() {
-                    @SuppressLint("ResourceAsColor")
-                    @Override
-                    public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                        calendar.setTextColor(R.color.black);
-                        calendar.setText(dayOfMonth + "/" + (monthOfYear + 1) + "/" + year);
-                        date = dayOfMonth + "/" + (monthOfYear + 1) + "/" + year;
-                        status = true;
-                        count = 1;
-                    }
-                }, mYear, mMonth, mDay);
-                datePickerDialog.show();
-            }
-
-           if (status == true && count == 1) {
-               final Calendar c2 = Calendar.getInstance();
-               mHour = c2.get(Calendar.HOUR_OF_DAY);
-               mMinute = c2.get(Calendar.MINUTE);
-               TimePickerDialog timePickerDialog = new TimePickerDialog(DetailsFragment.this.getContext(), new TimePickerDialog.OnTimeSetListener() {
-                   @Override
-                   public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                       calendar.append(" " + hourOfDay + ":" + minute);
-                       hours = hourOfDay + ":" + minute;
-                       status = false;
-                   }
-               }, mHour, mMinute, false);
-               timePickerDialog.show();
-           }
-           booking.setClickable(true);
-        });
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        db.collection("Bookings")
-                .whereEqualTo("user", mParam8)
+        db.collection("Fields")
+                .whereEqualTo("title", mParam2)
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
@@ -218,18 +183,76 @@ public class DetailsFragment extends Fragment {
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 Log.d(TAG, document.getId() + " => " + document.getData());
-                                booking.setText("Annulla prenotazione");
-                                booking.setBackgroundColor(R.color.white);
-                                booking.setTextColor(R.color.green);
-                                bookingStatus = true;
+                                detailsAddress.setText(document.get("address").toString());
+                                detailsHours.setText("Orari: " + document.get("hours").toString());
+                                db.collection("Bookings")
+                                        .whereEqualTo("title", mParam2)
+                                        .whereEqualTo("user", mParam8)
+                                        .get()
+                                        .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                            @Override
+                                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                                if (task.isSuccessful()) {
+                                                    for (QueryDocumentSnapshot document : task.getResult()) {
+                                                        Log.d(TAG, document.getId() + " => " + document.getData());
+                                                        booking.setText("Annulla prenotazione");
+                                                        booking.setBackgroundColor(Color.WHITE);
+                                                        booking.setTextColor(Color.GREEN);
+                                                        booking.setClickable(true);
+                                                        bookingStatus = true;
+                                                        calendar.setTextColor(R.color.black);
+                                                        calendar.setText(mParam4 + " " + mParam5);
+                                                    }
+                                                    bookingFieldsAdapter.notifyDataSetChanged();
+                                                } else {
+                                                    Log.w(TAG, "Error getting documents.", task.getException());
+                                                }
+                                            }
+                                        });
                             }
-                            bookingFieldsAdapter.notifyDataSetChanged();
                         } else {
                             Log.w(TAG, "Error getting documents.", task.getException());
-                            Toast.makeText(DetailsFragment.this.getContext(), "Errore di caricamento", Toast.LENGTH_LONG).show();
                         }
                     }
                 });
+        calendarImage.setOnClickListener(v -> {
+            if (bookingStatus == false) {
+                if (status == false && count == 0) {
+                    final Calendar c = Calendar.getInstance();
+                    mYear = c.get(Calendar.YEAR);
+                    mMonth = c.get(Calendar.MONTH);
+                    mDay = c.get(Calendar.DAY_OF_MONTH);
+                    DatePickerDialog datePickerDialog = new DatePickerDialog(DetailsFragment.this.getContext(), new DatePickerDialog.OnDateSetListener() {
+                        @SuppressLint("ResourceAsColor")
+                        @Override
+                        public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                            calendar.setTextColor(R.color.black);
+                            calendar.setText(dayOfMonth + "/" + (monthOfYear + 1) + "/" + year);
+                            date = dayOfMonth + "/" + (monthOfYear + 1) + "/" + year;
+                            status = true;
+                            count = 1;
+                        }
+                    }, mYear, mMonth, mDay);
+                    datePickerDialog.show();
+                }
+
+                if (status == true && count == 1) {
+                    final Calendar c2 = Calendar.getInstance();
+                    mHour = c2.get(Calendar.HOUR_OF_DAY);
+                    mMinute = c2.get(Calendar.MINUTE);
+                    TimePickerDialog timePickerDialog = new TimePickerDialog(DetailsFragment.this.getContext(), new TimePickerDialog.OnTimeSetListener() {
+                        @Override
+                        public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+                            calendar.append(" " + hourOfDay + ":" + minute);
+                            hours = hourOfDay + ":" + minute;
+                            status = false;
+                        }
+                    }, mHour, mMinute, false);
+                    timePickerDialog.show();
+                }
+                booking.setClickable(true);
+            }
+        });
         booking.setOnClickListener(v -> {
             if (bookingStatus == false) {
                 HashMap<String, Object> field = new HashMap<>();
@@ -276,6 +299,7 @@ public class DetailsFragment extends Fragment {
                                     booking.setBackgroundColor(R.color.green);
                                     booking.setTextColor(R.color.white);
                                     bookingStatus = false;
+                                    calendar.setText("");
                                 } else {
                                     Log.w(ContentValues.TAG, "Error getting documents.", task.getException());
                                 }

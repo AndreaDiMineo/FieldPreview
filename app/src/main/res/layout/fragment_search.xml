@@ -48,7 +48,7 @@
         <com.mapbox.maps.MapView
             android:id="@+id/mapFieldsView"
             android:layout_width="300dp"
-            android:layout_height="100dp"
+            android:layout_height="150dp"
             android:layout_marginTop="20dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.495"
@@ -58,7 +58,7 @@
             app:mapbox_cameraPitch="0.0"
             app:mapbox_cameraTargetLat="45.4626158"
             app:mapbox_cameraTargetLng="9.0132701"
-            app:mapbox_cameraZoom="3.0"
+            app:mapbox_cameraZoom="10.0"
             />
 
         <androidx.recyclerview.widget.RecyclerView
@@ -71,7 +71,6 @@
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/mapFieldsView"
-            tools:ignore="MissingConstraints"
             tools:listitem="@layout/mio_layout_item" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

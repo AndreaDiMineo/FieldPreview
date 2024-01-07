@@ -10,11 +10,23 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <ImageView
+            android:id="@+id/image"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_width="69dp"
+            android:layout_height="59dp"
+            android:src="@mipmap/ic_launcher_foreground"
+            tools:ignore="MissingConstraints"
+            tools:layout_editor_absoluteX="171dp"
+            tools:layout_editor_absoluteY="16dp" />
+
         <TextView
             android:id="@+id/name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="25dp"
+            android:layout_marginEnd="15dp"
             android:text="Nome"
             android:textSize="30dp"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -22,19 +34,19 @@
             app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.023" />
+            app:layout_constraintVertical_bias="0.099" />
 
         <TextView
             android:id="@+id/surname"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="80dp"
+            android:layout_marginEnd="76dp"
             android:text="Cognome"
             android:textSize="30dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.023" />
+            app:layout_constraintVertical_bias="0.099" />
 
         <TextView
             android:id="@+id/mail"
@@ -44,10 +56,10 @@
             android:textSize="15dp"
             app:layout_constraintBottom_toTopOf="@+id/logout"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.256"
+            app:layout_constraintHorizontal_bias="0.373"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/name"
-            app:layout_constraintVertical_bias="0.111" />
+            app:layout_constraintVertical_bias="0.061" />
 
         <TextView
             android:id="@+id/psw"
@@ -57,10 +69,25 @@
             android:textSize="15dp"
             app:layout_constraintBottom_toTopOf="@+id/delete"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.272"
+            app:layout_constraintHorizontal_bias="0.405"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/mail"
-            app:layout_constraintVertical_bias="0.103" />
+            app:layout_constraintVertical_bias="0.075" />
+
+        <TextView
+            android:id="@+id/bookingFieldsTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="9dp"
+            android:text="Campi prenotati"
+            android:textSize="20dp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toTopOf="@+id/bookingList"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.026"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="1.0" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/bookingList"
@@ -70,9 +97,21 @@
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.548"
             tools:listitem="@layout/mio_layout_booking" />
+
+        <TextView
+            android:id="@+id/noBookingFields"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/bookingList"
+            app:layout_constraintHorizontal_bias="0.206"
+            app:layout_constraintStart_toStartOf="@+id/bookingList"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <Button
             android:id="@+id/logout"

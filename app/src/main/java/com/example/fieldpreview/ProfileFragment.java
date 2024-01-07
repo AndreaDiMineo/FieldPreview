@@ -79,6 +79,7 @@ public class ProfileFragment extends Fragment {
         TextView surname = view.findViewById(R.id.surname);
         TextView email = view.findViewById(R.id.mail);
         TextView psw = view.findViewById(R.id.psw);
+        TextView nbf = view.findViewById(R.id.noBookingFields);
         name.setText(mParam1);
         surname.setText(mParam2);
         email.setText("Email: " + mParam3);
@@ -105,7 +106,7 @@ public class ProfileFragment extends Fragment {
                             bookingFieldsAdapter.notifyDataSetChanged();
                         } else {
                             Log.w(TAG, "Error getting documents.", task.getException());
-                            Toast.makeText(ProfileFragment.this.getContext(), "Errore di caricamento", Toast.LENGTH_LONG).show();
+                            nbf.setText("Nessun campo prenotato al momento");
                         }
                     }
                 });

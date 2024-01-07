@@ -29,7 +29,7 @@ public class BookingFieldsAdapter extends RecyclerView.Adapter<BookingFieldsAdap
     @NonNull
     @Override
     public BookingFieldsAdapter.BookingFieldViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.mio_layout_item, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.mio_layout_booking, parent, false);
         return new BookingFieldsAdapter.BookingFieldViewHolder(view);
     }
 
@@ -62,7 +62,7 @@ public class BookingFieldsAdapter extends RecyclerView.Adapter<BookingFieldsAdap
             super(itemView);
 
             img = itemView.findViewById(R.id.fieldImage);
-            title = itemView.findViewById(R.id.fieldTitle);
+            title = itemView.findViewById(R.id.bookingFieldTitle);
             hours = itemView.findViewById(R.id.fieldHours);
             progressBar = itemView.findViewById(R.id.progressBar);
         }
@@ -81,7 +81,7 @@ public class BookingFieldsAdapter extends RecyclerView.Adapter<BookingFieldsAdap
                         }
                     });
             title.setText(field.title);
-            hours.setText("Orari: " + field.days + " " + field.hours);
+            hours.setText("Pren. " + field.days + " " + field.hours);
         }
     }
 }
