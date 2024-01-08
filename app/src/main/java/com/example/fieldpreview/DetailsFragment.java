@@ -54,6 +54,7 @@ public class DetailsFragment extends Fragment {
     private static final String ARG_PARAM7 = "param7";
     private static final String ARG_PARAM8 = "param8";
     private static final String ARG_PARAM9 = "param9";
+    private static final String ARG_PARAM10 = "param10";
     private int mYear, mMonth, mDay, mHour, mMinute, count;
     private boolean status = false;
     private boolean bookingStatus = false;
@@ -68,6 +69,7 @@ public class DetailsFragment extends Fragment {
     private String mParam7;
     private String mParam8;
     private String mParam9;
+    private String mParam10;
     private String date;
     private String hours;
 
@@ -84,7 +86,7 @@ public class DetailsFragment extends Fragment {
      * @return A new instance of fragment DetailsFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static DetailsFragment newInstance(String param1, String param2, String param3, String param4, String param5, String param6, String param7, String param8, String param9) {
+    public static DetailsFragment newInstance(String param1, String param2, String param3, String param4, String param5, String param6, String param7, String param8, String param9, String param10) {
         DetailsFragment fragment = new DetailsFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
@@ -96,6 +98,7 @@ public class DetailsFragment extends Fragment {
         args.putString(ARG_PARAM7, param7);
         args.putString(ARG_PARAM8, param8);
         args.putString(ARG_PARAM9, param9);
+        args.putString(ARG_PARAM10, param10);
         fragment.setArguments(args);
         return fragment;
     }
@@ -113,6 +116,7 @@ public class DetailsFragment extends Fragment {
             mParam7 = getArguments().getString(ARG_PARAM7);
             mParam8 = getArguments().getString(ARG_PARAM8);
             mParam9 = getArguments().getString(ARG_PARAM9);
+            mParam10 = getArguments().getString(ARG_PARAM10);
         }
     }
 
@@ -167,11 +171,27 @@ public class DetailsFragment extends Fragment {
         Button booking = view.findViewById(R.id.booking);
         Button detailsBack = view.findViewById(R.id.detailsBack);
         detailsBack.setOnClickListener(v -> {
-            FragmentManager fragmentManager = getParentFragmentManager();
-            fragmentManager.beginTransaction()
-                    .replace(R.id.fragment_container, SearchFragment.class, null)
-                    .setReorderingAllowed(true)
-                    .commit();
+            if (mParam10.equals("home")) {
+                FragmentManager fragmentManager = getParentFragmentManager();
+                fragmentManager.beginTransaction()
+                        .replace(R.id.fragment_container, HomeFragment.class, null)
+                        .setReorderingAllowed(true)
+                        .commit();
+            }
+            else if (mParam10.equals("search")) {
+                FragmentManager fragmentManager = getParentFragmentManager();
+                fragmentManager.beginTransaction()
+                        .replace(R.id.fragment_container, SearchFragment.class, null)
+                        .setReorderingAllowed(true)
+                        .commit();
+            }
+            else if (mParam10.equals("profile")) {
+                FragmentManager fragmentManager = getParentFragmentManager();
+                fragmentManager.beginTransaction()
+                        .replace(R.id.fragment_container, ProfileFragment.class, null)
+                        .setReorderingAllowed(true)
+                        .commit();
+            }
         });
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         db.collection("Fields")

@@ -76,6 +76,9 @@ public class SearchFragment extends Fragment {
         ArrayList<Field> fields = new ArrayList<>();
         FieldsAdapter fieldsAdapter = new FieldsAdapter(fields);
         button.setOnClickListener(v -> {
+            if (fields.size() > 0) {
+                fields.clear();
+            }
             FirebaseFirestore db = FirebaseFirestore.getInstance();
             db.collection("Fields")
                     .whereEqualTo("city", editText.getText().toString())
@@ -112,7 +115,8 @@ public class SearchFragment extends Fragment {
                     mParam1,
                     mParam2,
                     mParam3,
-                    mParam4);
+                    mParam4,
+                    "search");
             fragmentManager.beginTransaction()
                     .replace(R.id.fragment_container, detailsFragment)
                     .setReorderingAllowed(true)

@@ -16,7 +16,7 @@
             android:id="@+id/card_view_project_icon_container"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="62dp"
+            android:layout_marginStart="25dp"
             android:layout_marginTop="12dp"
             android:layout_marginEnd="12dp"
             android:layout_marginBottom="12dp"
@@ -25,8 +25,8 @@
 
             <ImageView
                 android:id="@+id/fieldImage"
-                android:layout_width="80dp"
-                android:layout_height="80dp"
+                android:layout_width="150dp"
+                android:layout_height="70dp"
                 android:scaleType="centerCrop"
                 tools:src="@drawable/ic_launcher_background" />
 
@@ -45,6 +45,7 @@
             android:layout_marginTop="88dp"
             android:fontFamily="sans-serif-black"
             android:text="Titolo"
+            android:textAlignment="center"
             android:textColor="#222"
             android:textSize="18sp" />
 
@@ -54,6 +55,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/bookingFieldTitle"
             android:layout_marginTop="6dp"
+            android:textAlignment="center"
             android:text="Pren. "
             android:textSize="18sp" />
 

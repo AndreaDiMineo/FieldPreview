@@ -122,7 +122,8 @@ public class ProfileFragment extends Fragment {
                     mParam1,
                     mParam2,
                     mParam3,
-                    mParam4);
+                    mParam4,
+                    "profile");
             fragmentManager.beginTransaction()
                     .replace(R.id.fragment_container, detailsFragment)
                     .setReorderingAllowed(true)

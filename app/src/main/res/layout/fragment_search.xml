@@ -58,14 +58,13 @@
             app:mapbox_cameraPitch="0.0"
             app:mapbox_cameraTargetLat="45.4626158"
             app:mapbox_cameraTargetLng="9.0132701"
-            app:mapbox_cameraZoom="10.0"
-            />
+            app:mapbox_cameraZoom="10.0" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerView"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
+            android:layout_height="match_parent"
+            android:layout_marginTop="330dp"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"

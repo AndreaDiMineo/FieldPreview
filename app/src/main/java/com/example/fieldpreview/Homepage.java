@@ -23,7 +23,7 @@ public class Homepage extends AppCompatActivity {
         BottomNavigationView bottomNav = findViewById(R.id.bottom_nav);
         bottomNav.setOnItemSelectedListener(item -> {
             switch (item.getItemId()) {
-                case R.id.nav_home: return showFragment(HomeFragment.class);
+                case R.id.nav_home: return showCustomFragment("home");
                 case R.id.nav_search: return showCustomFragment("search");
                 case R.id.nav_profile: return showCustomFragment("profile");
                 default:
@@ -33,18 +33,27 @@ public class Homepage extends AppCompatActivity {
         });
     }
 
-    protected Boolean showFragment(Class<? extends Fragment> theClass) {
+    /*protected Boolean showFragment(Class<? extends Fragment> theClass) {
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction()
                 .replace(R.id.fragment_container, theClass, null)
                 .setReorderingAllowed(true)
                 .commit();
         return true;
-    }
+    }*/
 
     protected Boolean showCustomFragment(String ris) {
         FragmentManager fragmentManager = getSupportFragmentManager();
-        if (ris.equals("search")) {
+        if (ris.equals("home")) {
+            HomeFragment searchFragment = HomeFragment.newInstance(
+                    result.get("email").toString()
+            );
+            fragmentManager.beginTransaction()
+                    .replace(R.id.fragment_container, searchFragment)
+                    .setReorderingAllowed(true)
+                    .commit();
+        }
+        else if (ris.equals("search")) {
             SearchFragment searchFragment = SearchFragment.newInstance(
                     result.get("name").toString(),
                     result.get("surname").toString(),
