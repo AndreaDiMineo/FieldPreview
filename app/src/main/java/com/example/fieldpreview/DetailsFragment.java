@@ -58,6 +58,7 @@ public class DetailsFragment extends Fragment {
     private int mYear, mMonth, mDay, mHour, mMinute, count;
     private boolean status = false;
     private boolean bookingStatus = false;
+    private boolean existed = false;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -276,11 +277,30 @@ public class DetailsFragment extends Fragment {
                     }, mHour, mMinute, false);
                     timePickerDialog.show();
                 }
-                booking.setClickable(true);
+                if (date != "" && hours != "") {
+                    booking.setClickable(true);
+                }
             }
         });
         booking.setOnClickListener(v -> {
             if (bookingStatus == false) {
+                db.collection("Bookings")
+                        .whereEqualTo("hours", hours)
+                        .get()
+                        .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                            @Override
+                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                if (task.isSuccessful()) {
+                                    for (QueryDocumentSnapshot document : task.getResult()) {
+                                        Log.d(TAG, document.getId() + " => " + document.getData());
+                                        existed = true;
+                                    }
+                                } else {
+                                    Log.w(TAG, "Error getting documents.", task.getException());
+                                }
+                            }
+                        });
+                if (existed == false) {
                 HashMap<String, Object> field = new HashMap<>();
                 field.put("title", mParam2);
                 field.put("image", mParam1);
@@ -306,6 +326,7 @@ public class DetailsFragment extends Fragment {
                                 Log.w(TAG, "Error adding document", e);
                             }
                         });
+                }
             }
             else {
                 db.collection("Bookings")
