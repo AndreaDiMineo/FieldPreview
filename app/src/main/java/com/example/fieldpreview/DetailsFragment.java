@@ -187,8 +187,14 @@ public class DetailsFragment extends Fragment {
             }
             else if (mParam10.equals("profile")) {
                 FragmentManager fragmentManager = getParentFragmentManager();
+                ProfileFragment profileFragment = ProfileFragment.newInstance(
+                        mParam6,
+                        mParam7,
+                        mParam8,
+                        mParam9
+                );
                 fragmentManager.beginTransaction()
-                        .replace(R.id.fragment_container, ProfileFragment.class, null)
+                        .replace(R.id.fragment_container, profileFragment)
                         .setReorderingAllowed(true)
                         .commit();
             }
