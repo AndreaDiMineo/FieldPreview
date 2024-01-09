@@ -278,6 +278,8 @@ public class DetailsFragment extends Fragment {
                     timePickerDialog.show();
                 }
                 if (date != "" && hours != "") {
+                    status = false;
+                    count = 0;
                     booking.setClickable(true);
                 }
             }
@@ -293,6 +295,7 @@ public class DetailsFragment extends Fragment {
                                 if (task.isSuccessful()) {
                                     for (QueryDocumentSnapshot document : task.getResult()) {
                                         Log.d(TAG, document.getId() + " => " + document.getData());
+                                        Toast.makeText(DetailsFragment.this.getContext(), "Prenotazione già esistente per quell'orario", Toast.LENGTH_LONG).show();
                                         existed = true;
                                     }
                                 } else {
@@ -301,31 +304,31 @@ public class DetailsFragment extends Fragment {
                             }
                         });
                 if (existed == false) {
-                HashMap<String, Object> field = new HashMap<>();
-                field.put("title", mParam2);
-                field.put("image", mParam1);
-                field.put("date", date);
-                field.put("hours", hours);
-                field.put("user", mParam8);
-                db.collection("Bookings")
-                        .add(field)
-                        .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                            @Override
-                            public void onSuccess(DocumentReference documentReference) {
-                                Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId());
-                                Toast.makeText(DetailsFragment.this.getContext(), "Campo prenotato", Toast.LENGTH_LONG).show();
-                                booking.setText("Annulla prenotazione");
-                                booking.setBackgroundColor(R.color.white);
-                                booking.setTextColor(R.color.green);
-                                bookingStatus = true;
-                            }
-                        })
-                        .addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                Log.w(TAG, "Error adding document", e);
-                            }
-                        });
+                    HashMap<String, Object> field = new HashMap<>();
+                    field.put("title", mParam2);
+                    field.put("image", mParam1);
+                    field.put("date", date);
+                    field.put("hours", hours);
+                    field.put("user", mParam8);
+                    db.collection("Bookings")
+                            .add(field)
+                            .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                                @Override
+                                public void onSuccess(DocumentReference documentReference) {
+                                    Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId());
+                                    Toast.makeText(DetailsFragment.this.getContext(), "Campo prenotato", Toast.LENGTH_LONG).show();
+                                    booking.setText("Annulla prenotazione");
+                                    booking.setBackgroundColor(R.color.white);
+                                    booking.setTextColor(R.color.green);
+                                    bookingStatus = true;
+                                }
+                            })
+                            .addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    Log.w(TAG, "Error adding document", e);
+                                }
+                            });
                 }
             }
             else {

@@ -7,10 +7,13 @@ import androidx.databinding.DataBindingUtil;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.fieldpreview.databinding.ActivityLoginBinding;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -21,15 +24,16 @@ import java.util.Map;
 
 public class Login extends AppCompatActivity {
 
-    protected ActivityLoginBinding binding;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_login);
-        binding.loginSubmit.setOnClickListener(v -> {
-            String email = binding.email.getText().toString();
-            String password = binding.password.getText().toString();
+        setContentView(R.layout.activity_login);
+        Button login = findViewById(R.id.loginSubmit);
+        EditText textEmail = findViewById(R.id.email);
+        EditText textPassword = findViewById(R.id.password);
+        login.setOnClickListener(v -> {
+            String email = textEmail.getText().toString();
+            String password = textPassword.getText().toString();
             FirebaseFirestore db = FirebaseFirestore.getInstance();
             db.collection("Users")
                     .whereEqualTo("email", email)
