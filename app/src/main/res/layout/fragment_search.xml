@@ -56,9 +56,9 @@
             app:layout_constraintTop_toBottomOf="@+id/searchInput"
             app:mapbox_cameraBearing="0.0"
             app:mapbox_cameraPitch="0.0"
-            app:mapbox_cameraTargetLat="45.4626158"
-            app:mapbox_cameraTargetLng="9.0132701"
-            app:mapbox_cameraZoom="10.0" />
+            app:mapbox_cameraTargetLat="45.4009316"
+            app:mapbox_cameraTargetLng="8.9475792"
+            app:mapbox_cameraZoom="5.0" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerView"

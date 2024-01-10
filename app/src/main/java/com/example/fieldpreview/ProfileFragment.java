@@ -9,7 +9,6 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,7 +16,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -83,7 +81,7 @@ public class ProfileFragment extends Fragment {
         name.setText(mParam1);
         surname.setText(mParam2);
         email.setText("Email: " + mParam3);
-        psw.setText("Password: " + mParam4);
+        psw.setText(mParam4);
         RecyclerView recyclerView = view.findViewById(R.id.bookingList);
         ArrayList<Field> fields = new ArrayList<>();
         BookingFieldsAdapter bookingFieldsAdapter = new BookingFieldsAdapter(fields);

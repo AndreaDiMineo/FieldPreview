@@ -65,6 +65,7 @@
             android:layout_marginTop="16dp"
             android:text="Titolo"
             android:textSize="25dp"
+            android:textAlignment="center"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/detailsImage" />
@@ -75,6 +76,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             android:text="Indirizzo"
+            android:textAlignment="center"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/detailsTitle" />
@@ -85,6 +87,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
             android:text="Orari"
+            android:textAlignment="center"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.498"
             app:layout_constraintStart_toStartOf="parent"

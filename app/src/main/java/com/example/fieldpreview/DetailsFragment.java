@@ -287,6 +287,7 @@ public class DetailsFragment extends Fragment {
         booking.setOnClickListener(v -> {
             if (bookingStatus == false) {
                 db.collection("Bookings")
+                        .whereEqualTo("date", date)
                         .whereEqualTo("hours", hours)
                         .get()
                         .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -318,8 +319,8 @@ public class DetailsFragment extends Fragment {
                                     Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId());
                                     Toast.makeText(DetailsFragment.this.getContext(), "Campo prenotato", Toast.LENGTH_LONG).show();
                                     booking.setText("Annulla prenotazione");
-                                    booking.setBackgroundColor(R.color.white);
-                                    booking.setTextColor(R.color.green);
+                                    booking.setBackgroundColor(Color.WHITE);
+                                    booking.setTextColor(Color.GREEN);
                                     bookingStatus = true;
                                 }
                             })
@@ -346,8 +347,8 @@ public class DetailsFragment extends Fragment {
                                     }
                                     Toast.makeText(DetailsFragment.this.getContext(), "Prenotazione campo annullata", Toast.LENGTH_LONG).show();
                                     booking.setText("Prenota");
-                                    booking.setBackgroundColor(R.color.green);
-                                    booking.setTextColor(R.color.white);
+                                    booking.setBackgroundColor(Color.GREEN);
+                                    booking.setTextColor(Color.WHITE);
                                     bookingStatus = false;
                                     calendar.setText("");
                                 } else {

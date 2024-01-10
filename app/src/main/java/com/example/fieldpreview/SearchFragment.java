@@ -19,7 +19,11 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.mapbox.geojson.Point;
+import com.mapbox.maps.CameraOptions;
 import com.mapbox.maps.MapView;
+import com.mapbox.maps.MapboxMap;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -96,6 +100,14 @@ public class SearchFragment extends Fragment {
                                                     document.get("hours").toString()));
                                 }
                                 fieldsAdapter.notifyDataSetChanged();
+                                mapView.getMapboxMap().setCamera(
+                                        new CameraOptions.Builder()
+                                                .center(Point.fromLngLat(9.0953311, 45.4628246))
+                                                .pitch(0.0)
+                                                .zoom(8.0)
+                                                .bearing(0.0)
+                                                .build()
+                                );
                             } else {
                                 Log.w(TAG, "Error getting documents.", task.getException());
                                 Toast.makeText(SearchFragment.this.getContext(), "Nessun risultato trovato", Toast.LENGTH_LONG).show();
