@@ -45,11 +45,50 @@
             app:layout_constraintTop_toTopOf="parent"
             tools:ignore="MissingConstraints" />
 
+        <Button
+            android:id="@+id/soccerBtn"
+            android:layout_width="90dp"
+            android:layout_height="40dp"
+            android:layout_marginTop="12dp"
+            android:backgroundTint="@color/green"
+            android:text="Calcio"
+            android:focusableInTouchMode="false"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.161"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/searchInput" />
+
+        <Button
+            android:id="@+id/volleyBtn"
+            android:layout_width="110dp"
+            android:layout_height="40dp"
+            android:layout_marginTop="12dp"
+            android:backgroundTint="@color/green"
+            android:text="Pallavolo"
+            android:focusableInTouchMode="false"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.508"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/searchInput" />
+
+        <Button
+            android:id="@+id/padelBtn"
+            android:layout_width="90dp"
+            android:layout_height="40dp"
+            android:layout_marginTop="12dp"
+            android:backgroundTint="@color/green"
+            android:text="Padel"
+            android:focusableInTouchMode="false"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.85"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/searchInput" />
+
         <com.mapbox.maps.MapView
             android:id="@+id/mapFieldsView"
-            android:layout_width="300dp"
-            android:layout_height="150dp"
-            android:layout_marginTop="20dp"
+            android:layout_width="298dp"
+            android:layout_height="130dp"
+            android:layout_marginTop="64dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.495"
             app:layout_constraintStart_toStartOf="parent"

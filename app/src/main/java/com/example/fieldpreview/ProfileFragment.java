@@ -1,7 +1,10 @@
 package com.example.fieldpreview;
 
 import static android.content.ContentValues.TAG;
+
+import android.app.AlertDialog;
 import android.content.ContentValues;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
@@ -134,25 +137,41 @@ public class ProfileFragment extends Fragment {
         });
         Button delete = view.findViewById(R.id.delete);
         delete.setOnClickListener(v -> {
-            db.collection("Users")
-                    .whereEqualTo("email", name.getText().toString())
-                    .whereEqualTo("password", surname.getText().toString())
-                    .get()
-                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                        @Override
-                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                            if (task.isSuccessful()) {
-                                for (QueryDocumentSnapshot document : task.getResult()) {
-                                    Log.d(ContentValues.TAG, document.getId() + " => " + document.getData());
-                                    db.collection("Users").document(document.getId()).delete();
-                                }
-                            } else {
-                                Log.w(ContentValues.TAG, "Error getting documents.", task.getException());
-                            }
-                        }
-                    });
-            Intent intent = new Intent(ProfileFragment.this.getContext(), MainActivity.class);
-            startActivity(intent);
+            DialogInterface.OnClickListener listener = (dialog, which) -> {
+                switch (which) {
+                    case DialogInterface.BUTTON_NEGATIVE:
+                        Log.d("Dialog Button", "Premuto bottone negativo");
+                        break;
+                    case DialogInterface.BUTTON_POSITIVE:
+                        Log.d("Dialog Button", "Premuto bottone negativo");
+                        db.collection("Users")
+                                .whereEqualTo("email", name.getText().toString())
+                                .whereEqualTo("password", surname.getText().toString())
+                                .get()
+                                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                        if (task.isSuccessful()) {
+                                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                                Log.d(ContentValues.TAG, document.getId() + " => " + document.getData());
+                                                db.collection("Users").document(document.getId()).delete();
+                                            }
+                                        } else {
+                                            Log.w(ContentValues.TAG, "Error getting documents.", task.getException());
+                                        }
+                                    }
+                                });
+                        Intent intent = new Intent(ProfileFragment.this.getContext(), MainActivity.class);
+                        startActivity(intent);
+                        break;
+                }
+            };
+            new AlertDialog.Builder(ProfileFragment.this.getContext())
+                    .setTitle("Cancellazione account")
+                    .setMessage("Sei sicuro di voler eliminare il tuo account?")
+                    .setNegativeButton("No", listener)
+                    .setPositiveButton("Si", listener)
+                    .show();
         });
     }
 }
