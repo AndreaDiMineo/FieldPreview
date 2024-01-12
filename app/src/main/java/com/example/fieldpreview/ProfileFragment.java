@@ -27,7 +27,9 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Map;
 
 public class ProfileFragment extends Fragment {
@@ -98,6 +100,13 @@ public class ProfileFragment extends Fragment {
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 Log.d(TAG, document.getId() + " => " + document.getData());
+                                Date currentDate = new Date();
+                                SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+                                String[] currentDateTime = dateFormat.format(currentDate).split(" ");
+                                System.out.println(currentDateTime);
+                                /*if (document.get("date").toString().equals(currentDateTime[0]) && document.get("hours").toString().equals(currentDateTime[1])) {
+                                    db.collection("Bookings").document(document.getId()).delete();
+                                }*/
                                 fields.add(new Field(
                                         document.get("image").toString(),
                                         document.get("title").toString(),
