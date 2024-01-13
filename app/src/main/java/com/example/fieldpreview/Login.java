@@ -24,6 +24,8 @@ import java.util.Map;
 
 public class Login extends AppCompatActivity {
 
+    private boolean status = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,6 +47,7 @@ public class Login extends AppCompatActivity {
                             if (task.isSuccessful()) {
                                 for (QueryDocumentSnapshot document : task.getResult()) {
                                     Log.d(TAG, document.getId() + " => " + document.getData());
+                                    status = true;
                                     Intent intent = new Intent(Login.this, Homepage.class);
                                     Map<String, Object> result = document.getData();
                                     intent.putExtra("user", (Serializable) result);
@@ -52,6 +55,9 @@ public class Login extends AppCompatActivity {
                                 }
                             } else {
                                 Log.w(TAG, "Error getting documents.", task.getException());
+                                Toast.makeText(Login.this, "Credenziali errate", Toast.LENGTH_LONG).show();
+                            }
+                            if (status == false) {
                                 Toast.makeText(Login.this, "Credenziali errate", Toast.LENGTH_LONG).show();
                             }
                         }

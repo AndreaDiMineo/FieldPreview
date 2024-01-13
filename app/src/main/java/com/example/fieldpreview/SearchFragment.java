@@ -52,6 +52,10 @@ public class SearchFragment extends Fragment {
     private FieldsAdapter volleyAdapter = new FieldsAdapter(volley);
     private FieldsAdapter padelAdapter = new FieldsAdapter(padel);
     private boolean status = false;
+    private boolean checkStatus = false;
+    private int soccerCount = 0;
+    private int volleyCount = 0;
+    private int padelCount = 0;
     private String ris;
 
     public SearchFragment() {}
@@ -97,25 +101,22 @@ public class SearchFragment extends Fragment {
         MapView mapView = view.findViewById(R.id.mapFieldsView);
         RecyclerView recyclerView = view.findViewById(R.id.recyclerView);
         search.setOnClickListener(v -> {
-            if (fields.size() > 0 || soccer.size() > 0 || volley.size() > 0 || padel.size() > 0) {
-                if (fields.size() > 0) {
-                    fields.clear();
-                }
-                else if (soccer.size() > 0) {
-                    soccer.clear();
-                    soccerBtn.setBackgroundColor(Color.GREEN);
-                    soccerBtn.setTextColor(Color.WHITE);
-                }
-                else if (volley.size() > 0) {
-                    volley.clear();
-                    volleyBtn.setBackgroundColor(Color.GREEN);
-                    volleyBtn.setTextColor(Color.WHITE);
-                }
-                else if (padel.size() > 0) {
-                    padel.clear();
-                    padelBtn.setBackgroundColor(Color.GREEN);
-                    padelBtn.setTextColor(Color.WHITE);
-                }
+            if (fields.size() > 0 && soccer.size() >= 0 && volley.size() >= 0 && padel.size() >= 0) {
+                fields.clear();
+                soccer.clear();
+                soccerBtn.setBackgroundColor(Color.GREEN);
+                soccerBtn.setTextColor(Color.WHITE);
+                volley.clear();
+                volleyBtn.setBackgroundColor(Color.GREEN);
+                volleyBtn.setTextColor(Color.WHITE);
+                padel.clear();
+                padelBtn.setBackgroundColor(Color.GREEN);
+                padelBtn.setTextColor(Color.WHITE);
+                soccerCount = 0;
+                volleyCount = 0;
+                padelCount = 0;
+                fieldsAdapter = new FieldsAdapter(fields);
+                recyclerView.setAdapter(fieldsAdapter);
             }
             FirebaseFirestore db = FirebaseFirestore.getInstance();
             db.collection("Fields")
@@ -166,6 +167,7 @@ public class SearchFragment extends Fragment {
                         }
                     });
         });
+        editText.setText("");
         recyclerView.setAdapter(fieldsAdapter);
         fieldsAdapter.setOnItemClickListener((v, position) -> {
             FragmentManager fragmentManager = getParentFragmentManager();
@@ -243,45 +245,51 @@ public class SearchFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 if (fields.size() > 0) {
-                    if (soccer.size() == 0) {
+                    if (soccer.size() == 0 && soccerCount == 0) {
                         status = true;
                     } else {
                         status = false;
                     }
-                    FirebaseFirestore db = FirebaseFirestore.getInstance();
-                    db.collection("Fields")
-                            .whereEqualTo("city", editText.getText().toString())
-                            .whereEqualTo("category", soccerBtn.getText().toString())
-                            .get()
-                            .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                                @Override
-                                public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                                    if (task.isSuccessful()) {
-                                        for (QueryDocumentSnapshot document : task.getResult()) {
-                                            Log.d(TAG, document.getId() + " => " + document.getData());
-                                            if (status == true)
+                    if (status == true) {
+                        soccerCount++;
+                        FirebaseFirestore db = FirebaseFirestore.getInstance();
+                        db.collection("Fields")
+                                .whereEqualTo("city", editText.getText().toString())
+                                .whereEqualTo("category", soccerBtn.getText().toString())
+                                .get()
+                                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                        if (task.isSuccessful()) {
+                                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                                Log.d(TAG, document.getId() + " => " + document.getData());
+                                                soccerCount++;
                                                 soccer.add(new Field(document.get("image").toString(),
                                                         document.get("title").toString(),
                                                         document.get("address").toString(),
                                                         document.get("days").toString(),
                                                         document.get("hours").toString()));
-                                        }
-                                        soccerAdapter.notifyDataSetChanged();
-                                        for (Button btn : buttons) {
-                                            btn.setBackgroundColor(Color.GREEN);
-                                            btn.setTextColor(Color.WHITE);
-                                            if (btn.getText().toString().equals("Calcio")) {
-                                                btn.setBackgroundColor(Color.WHITE);
-                                                btn.setTextColor(Color.GREEN);
                                             }
+                                            soccerAdapter.notifyDataSetChanged();
+                                            for (Button btn : buttons) {
+                                                btn.setBackgroundColor(Color.GREEN);
+                                                btn.setTextColor(Color.WHITE);
+                                                if (btn.getText().toString().equals("Calcio")) {
+                                                    btn.setBackgroundColor(Color.WHITE);
+                                                    btn.setTextColor(Color.GREEN);
+                                                }
+                                            }
+                                        } else {
+                                            Log.w(TAG, "Error getting documents.", task.getException());
+                                            Toast.makeText(SearchFragment.this.getContext(), "Nessun risultato trovato", Toast.LENGTH_LONG).show();
                                         }
-                                    } else {
-                                        Log.w(TAG, "Error getting documents.", task.getException());
-                                        Toast.makeText(SearchFragment.this.getContext(), "Nessun risultato trovato", Toast.LENGTH_LONG).show();
                                     }
-                                }
-                            });
-                    recyclerView.setAdapter(soccerAdapter);
+                                });
+                        recyclerView.setAdapter(soccerAdapter);
+                        if (soccerCount == 1 || soccerCount == 2) {
+                            status = false;
+                        }
+                    }
                 }
             }
         });
@@ -289,45 +297,51 @@ public class SearchFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 if (fields.size() > 0) {
-                    if (volley.size() == 0) {
+                    if (volley.size() == 0 && volleyCount == 0) {
                         status = true;
                     } else {
                         status = false;
                     }
-                    FirebaseFirestore db = FirebaseFirestore.getInstance();
-                    db.collection("Fields")
-                            .whereEqualTo("city", editText.getText().toString())
-                            .whereEqualTo("category", volleyBtn.getText().toString())
-                            .get()
-                            .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                                @Override
-                                public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                                    if (task.isSuccessful()) {
-                                        for (QueryDocumentSnapshot document : task.getResult()) {
-                                            Log.d(TAG, document.getId() + " => " + document.getData());
-                                            if (status == true)
+                    if (status == true) {
+                        volleyCount++;
+                        FirebaseFirestore db = FirebaseFirestore.getInstance();
+                        db.collection("Fields")
+                                .whereEqualTo("city", editText.getText().toString())
+                                .whereEqualTo("category", volleyBtn.getText().toString())
+                                .get()
+                                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                        if (task.isSuccessful()) {
+                                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                                Log.d(TAG, document.getId() + " => " + document.getData());
+                                                volleyCount++;
                                                 volley.add(new Field(document.get("image").toString(),
                                                         document.get("title").toString(),
                                                         document.get("address").toString(),
                                                         document.get("days").toString(),
                                                         document.get("hours").toString()));
-                                        }
-                                        volleyAdapter.notifyDataSetChanged();
-                                        for (Button btn : buttons) {
-                                            btn.setBackgroundColor(Color.GREEN);
-                                            btn.setTextColor(Color.WHITE);
-                                            if (btn.getText().toString().equals("Pallavolo")) {
-                                                btn.setBackgroundColor(Color.WHITE);
-                                                btn.setTextColor(Color.GREEN);
                                             }
+                                            volleyAdapter.notifyDataSetChanged();
+                                            for (Button btn : buttons) {
+                                                btn.setBackgroundColor(Color.GREEN);
+                                                btn.setTextColor(Color.WHITE);
+                                                if (btn.getText().toString().equals("Pallavolo")) {
+                                                    btn.setBackgroundColor(Color.WHITE);
+                                                    btn.setTextColor(Color.GREEN);
+                                                }
+                                            }
+                                        } else {
+                                            Log.w(TAG, "Error getting documents.", task.getException());
+                                            Toast.makeText(SearchFragment.this.getContext(), "Nessun risultato trovato", Toast.LENGTH_LONG).show();
                                         }
-                                    } else {
-                                        Log.w(TAG, "Error getting documents.", task.getException());
-                                        Toast.makeText(SearchFragment.this.getContext(), "Nessun risultato trovato", Toast.LENGTH_LONG).show();
                                     }
-                                }
-                            });
-                    recyclerView.setAdapter(volleyAdapter);
+                                });
+                        recyclerView.setAdapter(volleyAdapter);
+                        if (volleyCount == 1 || volleyCount == 2) {
+                            status = false;
+                        }
+                    }
                 }
             }
         });
@@ -335,45 +349,51 @@ public class SearchFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 if (fields.size() > 0) {
-                    if (padel.size() == 0) {
+                    if (padel.size() == 0 && padelCount == 0) {
                         status = true;
                     } else {
                         status = false;
                     }
-                    FirebaseFirestore db = FirebaseFirestore.getInstance();
-                    db.collection("Fields")
-                            .whereEqualTo("city", editText.getText().toString())
-                            .whereEqualTo("category", padelBtn.getText().toString())
-                            .get()
-                            .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                                @Override
-                                public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                                    if (task.isSuccessful()) {
-                                        for (QueryDocumentSnapshot document : task.getResult()) {
-                                            Log.d(TAG, document.getId() + " => " + document.getData());
-                                            if (status == true)
+                    if (status == true) {
+                        padelCount++;
+                        FirebaseFirestore db = FirebaseFirestore.getInstance();
+                        db.collection("Fields")
+                                .whereEqualTo("city", editText.getText().toString())
+                                .whereEqualTo("category", padelBtn.getText().toString())
+                                .get()
+                                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                        if (task.isSuccessful()) {
+                                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                                Log.d(TAG, document.getId() + " => " + document.getData());
+                                                padelCount++;
                                                 padel.add(new Field(document.get("image").toString(),
                                                         document.get("title").toString(),
                                                         document.get("address").toString(),
                                                         document.get("days").toString(),
                                                         document.get("hours").toString()));
-                                        }
-                                        padelAdapter.notifyDataSetChanged();
-                                        for (Button btn : buttons) {
-                                            btn.setBackgroundColor(Color.GREEN);
-                                            btn.setTextColor(Color.WHITE);
-                                            if (btn.getText().toString().equals("Padel")) {
-                                                btn.setBackgroundColor(Color.WHITE);
-                                                btn.setTextColor(Color.GREEN);
                                             }
+                                            padelAdapter.notifyDataSetChanged();
+                                            for (Button btn : buttons) {
+                                                btn.setBackgroundColor(Color.GREEN);
+                                                btn.setTextColor(Color.WHITE);
+                                                if (btn.getText().toString().equals("Padel")) {
+                                                    btn.setBackgroundColor(Color.WHITE);
+                                                    btn.setTextColor(Color.GREEN);
+                                                }
+                                            }
+                                        } else {
+                                            Log.w(TAG, "Error getting documents.", task.getException());
+                                            Toast.makeText(SearchFragment.this.getContext(), "Nessun risultato trovato", Toast.LENGTH_LONG).show();
                                         }
-                                    } else {
-                                        Log.w(TAG, "Error getting documents.", task.getException());
-                                        Toast.makeText(SearchFragment.this.getContext(), "Nessun risultato trovato", Toast.LENGTH_LONG).show();
                                     }
-                                }
-                            });
-                    recyclerView.setAdapter(padelAdapter);
+                                });
+                        recyclerView.setAdapter(padelAdapter);
+                        if (padelCount == 1 || padelCount == 2) {
+                            status = false;
+                        }
+                    }
                 }
             }
         });

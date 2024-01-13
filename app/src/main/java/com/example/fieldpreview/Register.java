@@ -12,31 +12,35 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Button;
+import android.widget.EditText;
+
 import com.example.fieldpreview.databinding.ActivityRegisterBinding;
 import java.util.HashMap;
 import java.util.Map;
 
 public class Register extends AppCompatActivity {
 
-    protected ActivityRegisterBinding binding;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_register);
-        binding.registerSubmit.setOnClickListener(v -> {
-            String name = binding.name.getText().toString();
-            String surname = binding.surname.getText().toString();
-            String email = binding.email.getText().toString();
-            String password = binding.password.getText().toString();
-            // Create a new user with a first and last name
+        setContentView(R.layout.activity_register);
+        Button registerSubmit = findViewById(R.id.registerSubmit);
+        EditText nameText = findViewById(R.id.name);
+        EditText surnameText = findViewById(R.id.surname);
+        EditText emailText = findViewById(R.id.email);
+        EditText passwordText = findViewById(R.id.password);
+        registerSubmit.setOnClickListener(v -> {
+            String name = nameText.getText().toString();
+            String surname = surnameText.getText().toString();
+            String email = emailText.getText().toString();
+            String password = passwordText.getText().toString();
             FirebaseFirestore db = FirebaseFirestore.getInstance();
             HashMap<String, Object> user = new HashMap<>();
             user.put("name", name);
             user.put("surname", surname);
             user.put("email", email);
             user.put("password", password);
-            // Add a new document with a generated ID
             db.collection("Users")
                     .add(user)
                     .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {

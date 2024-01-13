@@ -45,11 +45,11 @@ public class Homepage extends AppCompatActivity {
     protected Boolean showCustomFragment(String ris) {
         FragmentManager fragmentManager = getSupportFragmentManager();
         if (ris.equals("home")) {
-            HomeFragment searchFragment = HomeFragment.newInstance(
+            HomeFragment homeFragment = HomeFragment.newInstance(
                     result.get("email").toString()
             );
             fragmentManager.beginTransaction()
-                    .replace(R.id.fragment_container, searchFragment)
+                    .replace(R.id.fragment_container, homeFragment)
                     .setReorderingAllowed(true)
                     .commit();
         }

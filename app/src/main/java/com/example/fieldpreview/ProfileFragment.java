@@ -43,6 +43,7 @@ public class ProfileFragment extends Fragment {
     private String mParam2;
     private String mParam3;
     private String mParam4;
+    private boolean status = false;
 
     public ProfileFragment() {}
 
@@ -99,19 +100,37 @@ public class ProfileFragment extends Fragment {
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot document : task.getResult()) {
+                                status = false;
                                 Log.d(TAG, document.getId() + " => " + document.getData());
-                                Date currentDate = new Date();
+                                Date currentDateHours = new Date();
                                 SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm");
-                                String[] currentDateTime = dateFormat.format(currentDate).split(" ");
-                                System.out.println(currentDateTime);
-                                /*if (document.get("date").toString().equals(currentDateTime[0]) && document.get("hours").toString().equals(currentDateTime[1])) {
+                                String[] currentDateTime = dateFormat.format(currentDateHours).split(" ");
+                                String[] fieldDate = document.get("date").toString().split("/");
+                                String[] fieldHours = document.get("hours").toString().split(":");
+                                String[] currentDate = currentDateTime[0].split("/");
+                                String[] currentHours = currentDateTime[1].split(":");
+                                if (Integer.parseInt(currentDate[0]) > Integer.parseInt(fieldDate[0]) &&
+                                    Integer.parseInt(currentDate[1]) == Integer.parseInt(fieldDate[1]) &&
+                                    Integer.parseInt(currentDate[2]) == Integer.parseInt(fieldDate[2])) {
+                                    status = true;
                                     db.collection("Bookings").document(document.getId()).delete();
-                                }*/
-                                fields.add(new Field(
-                                        document.get("image").toString(),
-                                        document.get("title").toString(),
-                                        document.get("date").toString(),
-                                        document.get("hours").toString()));
+                                }
+                                else if (Integer.parseInt(currentDate[0]) == Integer.parseInt(fieldDate[0]) &&
+                                         Integer.parseInt(currentDate[1]) == Integer.parseInt(fieldDate[1]) &&
+                                         Integer.parseInt(currentDate[2]) == Integer.parseInt(fieldDate[2])) {
+                                    if (Integer.parseInt(currentHours[0]) >= Integer.parseInt(fieldHours[0]) &&
+                                            Integer.parseInt(currentHours[1]) >= Integer.parseInt(fieldHours[1])) {
+                                        status = true;
+                                        db.collection("Bookings").document(document.getId()).delete();
+                                    }
+                                }
+                                else if (status == false) {
+                                    fields.add(new Field(
+                                            document.get("image").toString(),
+                                            document.get("title").toString(),
+                                            document.get("date").toString(),
+                                            document.get("hours").toString()));
+                                }
                             }
                             bookingFieldsAdapter.notifyDataSetChanged();
                         } else {
