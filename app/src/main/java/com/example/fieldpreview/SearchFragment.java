@@ -52,7 +52,6 @@ public class SearchFragment extends Fragment {
     private FieldsAdapter volleyAdapter = new FieldsAdapter(volley);
     private FieldsAdapter padelAdapter = new FieldsAdapter(padel);
     private boolean status = false;
-    private boolean checkStatus = false;
     private int soccerCount = 0;
     private int volleyCount = 0;
     private int padelCount = 0;
@@ -115,8 +114,12 @@ public class SearchFragment extends Fragment {
                 soccerCount = 0;
                 volleyCount = 0;
                 padelCount = 0;
+                soccerAdapter = new FieldsAdapter(soccer);
+                volleyAdapter = new FieldsAdapter(volley);
+                padelAdapter = new FieldsAdapter(padel);
                 fieldsAdapter = new FieldsAdapter(fields);
                 recyclerView.setAdapter(fieldsAdapter);
+
             }
             FirebaseFirestore db = FirebaseFirestore.getInstance();
             db.collection("Fields")

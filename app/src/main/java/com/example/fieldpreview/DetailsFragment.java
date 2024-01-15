@@ -32,8 +32,11 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.squareup.picasso.Picasso;
+
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 
 /**
@@ -74,9 +77,7 @@ public class DetailsFragment extends Fragment {
     private String date;
     private String hours;
 
-    public DetailsFragment() {
-        // Required empty public constructor
-    }
+    public DetailsFragment() {}
 
     /**
      * Use this factory method to create a new instance of
@@ -260,6 +261,7 @@ public class DetailsFragment extends Fragment {
                             count = 1;
                         }
                     }, mYear, mMonth, mDay);
+                    datePickerDialog.getDatePicker().setMinDate(System.currentTimeMillis() - 1000);
                     datePickerDialog.show();
                 }
 
@@ -282,11 +284,14 @@ public class DetailsFragment extends Fragment {
                     count = 0;
                     booking.setClickable(true);
                 }
+                else {
+                    booking.setClickable(false);
+                }
             }
         });
         booking.setOnClickListener(v -> {
             if (bookingStatus == false) {
-                db.collection("Bookings")
+                /*db.collection("Bookings")
                         .whereEqualTo("date", date)
                         .whereEqualTo("hours", hours)
                         .get()
@@ -296,40 +301,56 @@ public class DetailsFragment extends Fragment {
                                 if (task.isSuccessful()) {
                                     for (QueryDocumentSnapshot document : task.getResult()) {
                                         Log.d(TAG, document.getId() + " => " + document.getData());
-                                        Toast.makeText(DetailsFragment.this.getContext(), "Prenotazione già esistente per quell'orario", Toast.LENGTH_LONG).show();
+                                        Toast.makeText(DetailsFragment.this.getContext(), "Prenotazione già occupata", Toast.LENGTH_LONG).show();
                                         existed = true;
                                     }
                                 } else {
                                     Log.w(TAG, "Error getting documents.", task.getException());
                                 }
                             }
-                        });
+                        });*/
                 if (existed == false) {
-                    HashMap<String, Object> field = new HashMap<>();
-                    field.put("title", mParam2);
-                    field.put("image", mParam1);
-                    field.put("date", date);
-                    field.put("hours", hours);
-                    field.put("user", mParam8);
-                    db.collection("Bookings")
-                            .add(field)
-                            .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                                @Override
-                                public void onSuccess(DocumentReference documentReference) {
-                                    Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId());
-                                    Toast.makeText(DetailsFragment.this.getContext(), "Campo prenotato", Toast.LENGTH_LONG).show();
-                                    booking.setText("Annulla prenotazione");
-                                    booking.setBackgroundColor(Color.WHITE);
-                                    booking.setTextColor(Color.GREEN);
-                                    bookingStatus = true;
-                                }
-                            })
-                            .addOnFailureListener(new OnFailureListener() {
-                                @Override
-                                public void onFailure(@NonNull Exception e) {
-                                    Log.w(TAG, "Error adding document", e);
-                                }
-                            });
+                    Date currentDateHours = new Date();
+                    SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+                    String[] currentDateTime = dateFormat.format(currentDateHours).split(" ");
+                    String[] fieldDate = date.split("/");
+                    String[] fieldHours = hours.split(":");
+                    String[] currentDate = currentDateTime[0].split("/");
+                    String[] currentHours = currentDateTime[1].split(":");
+                    if (Integer.parseInt(currentDate[0]) == Integer.parseInt(fieldDate[0]) &&
+                         Integer.parseInt(currentDate[1]) == Integer.parseInt(fieldDate[1]) &&
+                         Integer.parseInt(currentDate[2]) == Integer.parseInt(fieldDate[2]) &&
+                         Integer.parseInt(currentHours[0]) >= Integer.parseInt(fieldHours[0]) &&
+                         Integer.parseInt(currentHours[1]) >= Integer.parseInt(fieldHours[1])) {
+                        Toast.makeText(DetailsFragment.this.getContext(), "Orario precedente a quello attuale", Toast.LENGTH_LONG).show();
+                    }
+                    else {
+                        HashMap<String, Object> field = new HashMap<>();
+                        field.put("title", mParam2);
+                        field.put("image", mParam1);
+                        field.put("date", date);
+                        field.put("hours", hours);
+                        field.put("user", mParam8);
+                        db.collection("Bookings")
+                                .add(field)
+                                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                                    @Override
+                                    public void onSuccess(DocumentReference documentReference) {
+                                        Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId());
+                                        Toast.makeText(DetailsFragment.this.getContext(), "Campo prenotato", Toast.LENGTH_LONG).show();
+                                        booking.setText("Annulla prenotazione");
+                                        booking.setBackgroundColor(Color.WHITE);
+                                        booking.setTextColor(Color.GREEN);
+                                        bookingStatus = true;
+                                    }
+                                })
+                                .addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                        Log.w(TAG, "Error adding document", e);
+                                    }
+                                });
+                    }
                 }
             }
             else {
@@ -349,6 +370,7 @@ public class DetailsFragment extends Fragment {
                                     booking.setText("Prenota");
                                     booking.setBackgroundColor(Color.GREEN);
                                     booking.setTextColor(Color.WHITE);
+                                    booking.setClickable(false);
                                     bookingStatus = false;
                                     calendar.setText("");
                                 } else {
