@@ -94,6 +94,44 @@
             app:layout_constraintTop_toBottomOf="@+id/detailsAddress" />
 
         <TextView
+            android:id="@+id/partecipants"
+            android:layout_width="184dp"
+            android:layout_height="36dp"
+            android:background="@drawable/border_color"
+            android:textColor="@color/white"
+            android:textAlignment="center"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.497"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/detailsHours"
+            app:layout_constraintVertical_bias="0.06" />
+
+        <ImageView
+            android:id="@+id/minus"
+            android:layout_width="32dp"
+            android:layout_height="27dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginLeft="8dp"
+            app:layout_constraintHorizontal_bias="0.937"
+            app:layout_constraintStart_toStartOf="@+id/partecipants"
+            app:layout_constraintTop_toTopOf="@+id/partecipants"
+            app:layout_constraintVertical_bias="1.0"
+            tools:src="@drawable/minus" />
+
+        <ImageView
+            android:id="@+id/plus"
+            android:layout_width="32dp"
+            android:layout_height="27dp"
+            android:layout_marginTop="5dp"
+            app:layout_constraintEnd_toEndOf="@+id/partecipants"
+            app:layout_constraintHorizontal_bias="0.937"
+            app:layout_constraintStart_toStartOf="@+id/partecipants"
+            app:layout_constraintTop_toTopOf="@+id/partecipants"
+            app:layout_constraintVertical_bias="1.0"
+            tools:src="@drawable/plus" />
+
+        <TextView
             android:id="@+id/calendar"
             android:layout_width="184dp"
             android:layout_height="36dp"
@@ -101,10 +139,10 @@
             android:textColor="@color/white"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.498"
+            app:layout_constraintHorizontal_bias="0.497"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/detailsHours"
-            app:layout_constraintVertical_bias="0.097" />
+            app:layout_constraintTop_toBottomOf="@+id/partecipants"
+            app:layout_constraintVertical_bias="0.158" />
 
         <ImageView
             android:id="@+id/calendarImage"
@@ -112,10 +150,9 @@
             android:layout_height="27dp"
             android:layout_marginTop="5dp"
             app:layout_constraintEnd_toEndOf="@+id/calendar"
-            app:layout_constraintHorizontal_bias="0.937"
+            app:layout_constraintHorizontal_bias="0.94"
             app:layout_constraintStart_toStartOf="@+id/calendar"
             app:layout_constraintTop_toTopOf="@+id/calendar"
-            app:layout_constraintVertical_bias="1.0"
             tools:src="@drawable/calendar" />
 
         <Button

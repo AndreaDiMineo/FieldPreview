@@ -77,6 +77,7 @@ public class DetailsFragment extends Fragment {
     private String mParam10;
     private String date;
     private String hours;
+    private int numP = 1;
 
     public DetailsFragment() {}
 
@@ -136,6 +137,9 @@ public class DetailsFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         ImageView calendarImage = view.findViewById(R.id.calendarImage);
         ImageView detailsImage = view.findViewById(R.id.detailsImage);
+        ImageView plus = view.findViewById(R.id.plus);
+        ImageView minus = view.findViewById(R.id.minus);
+        TextView partecipants = view.findViewById(R.id.partecipants);
         ProgressBar progressBar = view.findViewById(R.id.detailsProgressBar);
         RecyclerView recyclerView = view.findViewById(R.id.bookingList);
         ArrayList<Field> fields = new ArrayList<>();
@@ -164,6 +168,30 @@ public class DetailsFragment extends Fragment {
                         progressBar.setVisibility(View.INVISIBLE);
                     }
                 });
+        Picasso.get()
+                .load(R.drawable.minus)
+                .into(minus, new com.squareup.picasso.Callback() {
+                    @Override
+                    public void onSuccess() {
+                        progressBar.setVisibility(View.INVISIBLE);
+                    }
+                    @Override
+                    public void onError(Exception e){
+                        progressBar.setVisibility(View.INVISIBLE);
+                    }
+                });
+        Picasso.get()
+                .load(R.drawable.plus)
+                .into(plus, new com.squareup.picasso.Callback() {
+                    @Override
+                    public void onSuccess() {
+                        progressBar.setVisibility(View.INVISIBLE);
+                    }
+                    @Override
+                    public void onError(Exception e){
+                        progressBar.setVisibility(View.INVISIBLE);
+                    }
+                });
         TextView calendar = view.findViewById(R.id.calendar);
         TextView detailsTitle = view.findViewById(R.id.detailsTitle);
         detailsTitle.setText(mParam2);
@@ -173,8 +201,10 @@ public class DetailsFragment extends Fragment {
         detailsHours.setText(mParam4 + " " + mParam5);
         Button booking = view.findViewById(R.id.booking);
         Button detailsBack = view.findViewById(R.id.detailsBack);
+        partecipants.setText(String.valueOf(numP));
         detailsBack.setOnClickListener(v -> {
             if (mParam10.equals("home")) {
+                numP = 1;
                 FragmentManager fragmentManager = getParentFragmentManager();
                 fragmentManager.beginTransaction()
                         .replace(R.id.fragment_container, HomeFragment.class, null)
@@ -182,6 +212,7 @@ public class DetailsFragment extends Fragment {
                         .commit();
             }
             else if (mParam10.equals("search")) {
+                numP = 1;
                 FragmentManager fragmentManager = getParentFragmentManager();
                 fragmentManager.beginTransaction()
                         .replace(R.id.fragment_container, SearchFragment.class, null)
@@ -189,6 +220,7 @@ public class DetailsFragment extends Fragment {
                         .commit();
             }
             else if (mParam10.equals("profile")) {
+                numP = 1;
                 FragmentManager fragmentManager = getParentFragmentManager();
                 ProfileFragment profileFragment = ProfileFragment.newInstance(
                         mParam6,
@@ -231,6 +263,11 @@ public class DetailsFragment extends Fragment {
                                                         bookingStatus = true;
                                                         calendar.setTextColor(R.color.black);
                                                         calendar.setText(mParam4 + " " + mParam5);
+                                                        partecipants.setText(document.get("numPartecipants").toString());
+                                                        minus.setVisibility(View.INVISIBLE);
+                                                        minus.setClickable(false);
+                                                        plus.setVisibility(View.INVISIBLE);
+                                                        plus.setClickable(false);
                                                     }
                                                     bookingFieldsAdapter.notifyDataSetChanged();
                                                 } else {
@@ -244,6 +281,19 @@ public class DetailsFragment extends Fragment {
                         }
                     }
                 });
+        minus.setOnClickListener(v -> {
+            if (numP == 1) {
+                numP = 1;
+            }
+            else {
+                numP--;
+            }
+            partecipants.setText(String.valueOf(numP));
+        });
+        plus.setOnClickListener(v -> {
+            numP++;
+            partecipants.setText(String.valueOf(numP));
+        });
         calendarImage.setOnClickListener(v -> {
             if (bookingStatus == false) {
                 if (status == false && count == 0) {
@@ -338,6 +388,7 @@ public class DetailsFragment extends Fragment {
                         field.put("image", mParam1);
                         field.put("date", date);
                         field.put("hours", hours);
+                        field.put("numPartecipants", String.valueOf(numP));
                         field.put("user", mParam8);
                         db.collection("Bookings")
                                 .add(field)
@@ -349,6 +400,10 @@ public class DetailsFragment extends Fragment {
                                         booking.setText("Annulla prenotazione");
                                         booking.setBackgroundColor(Color.WHITE);
                                         booking.setTextColor(Color.GREEN);
+                                        minus.setVisibility(View.INVISIBLE);
+                                        minus.setClickable(false);
+                                        plus.setVisibility(View.INVISIBLE);
+                                        plus.setClickable(false);
                                         bookingStatus = true;
                                     }
                                 })
@@ -382,6 +437,11 @@ public class DetailsFragment extends Fragment {
                                     booking.setClickable(false);
                                     bookingStatus = false;
                                     calendar.setText("");
+                                    minus.setVisibility(View.VISIBLE);
+                                    minus.setClickable(true);
+                                    plus.setVisibility(View.VISIBLE);
+                                    plus.setClickable(true);
+                                    partecipants.setText(String.valueOf(1));
                                 } else {
                                     Log.w(ContentValues.TAG, "Error getting documents.", task.getException());
                                 }
