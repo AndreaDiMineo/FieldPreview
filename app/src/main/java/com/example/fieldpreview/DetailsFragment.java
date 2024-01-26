@@ -78,6 +78,7 @@ public class DetailsFragment extends Fragment {
     private String date;
     private String hours;
     private int numP = 1;
+    private boolean hourStatus = false;
 
     public DetailsFragment() {}
 
@@ -368,10 +369,15 @@ public class DetailsFragment extends Fragment {
                     String[] fieldHours = hours.split(":");
                     String[] currentDate = currentDateTime[0].split("/");
                     String[] currentHours = currentDateTime[1].split(":");
-                    //String[] fieldSchedule = mParam5.split(":");
-                    /*if (Integer.parseInt(fieldHours[0]) >= Integer.parseInt(fieldSchedule[0]) &&
-                       Integer.parseInt(fieldHours[1]) <= Integer.parseInt(fieldSchedule[1])) {*/
-                    if (Integer.parseInt(currentDate[0]) == Integer.parseInt(fieldDate[0]) &&
+                    if (Integer.parseInt(fieldHours[0]) == 0 || Integer.parseInt(fieldHours[0]) == 1 ||
+                            Integer.parseInt(fieldHours[0]) == 2 || Integer.parseInt(fieldHours[0]) == 3 ||
+                            Integer.parseInt(fieldHours[0]) == 4 || Integer.parseInt(fieldHours[0]) == 5 ||
+                            Integer.parseInt(fieldHours[0]) == 6 || Integer.parseInt(fieldHours[0]) == 7) {
+                        selectedHours = true;
+                        hourStatus = true;
+                        Toast.makeText(DetailsFragment.this.getContext(), "Orario al di fuori dell'apertura del campo", Toast.LENGTH_LONG).show();
+                    }
+                    else if (hourStatus == false || Integer.parseInt(currentDate[0]) == Integer.parseInt(fieldDate[0]) &&
                             Integer.parseInt(currentDate[1]) == Integer.parseInt(fieldDate[1]) &&
                             Integer.parseInt(currentDate[2]) == Integer.parseInt(fieldDate[2]) &&
                             Integer.parseInt(currentHours[0]) >= Integer.parseInt(fieldHours[0]) &&
@@ -379,9 +385,6 @@ public class DetailsFragment extends Fragment {
                         selectedHours = true;
                         Toast.makeText(DetailsFragment.this.getContext(), "Orario precedente a quello attuale", Toast.LENGTH_LONG).show();
                     }
-                        /*selectedHours = true;
-                        Toast.makeText(DetailsFragment.this.getContext(), "Orario al di fuori dell'apertura del campo", Toast.LENGTH_LONG).show();
-                    //}*/
                     else if (selectedHours == false) {
                         HashMap<String, Object> field = new HashMap<>();
                         field.put("title", mParam2);
